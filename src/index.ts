@@ -21,11 +21,11 @@ module rabbitRx {
   
   export class RabbitBase {
     
+    private socketStream: Rx.Observable<rabbit.Socket>;
     constructor(private opts: IOpts) {      
-    }
-       
+    }       
     
-    private static connectSocket(queue: string, socket : rabbit.Socket) : Rx.Observable<rabbit.Socket> {
+    private static connectSocket(queue: string, socket : rabbit.Socket) : Rx.Observable<rabbit.Socket>  {
         return Rx.Observable.fromCallback(socket.connect)(queue)
         .map((val: any) => {
           if (val && val.status == "error") 
@@ -35,7 +35,7 @@ module rabbitRx {
         });
     }
         
-    connectContext(): Rx.Observable<rabbit.Socket> {
+    private connectContext(): Rx.Observable<rabbit.Socket> {
 
       var context = rabbit.createContext(this.opts.uri);
 
@@ -52,6 +52,13 @@ module rabbitRx {
          RabbitBase.connectSocket(this.opts.queue, socket)
       );    
     }        
+    
+    protected connectOnce<T>() : Rx.Observable<T>{
+      if (!this.socketStream) {
+        this.socketStream = this.connectContext(); 
+      }
+      return <any>this.socketStream;
+    }
   }
         
 	/**
@@ -63,13 +70,9 @@ module rabbitRx {
     constructor(opts: IOpts) {
       super(opts);
     }
-
-    private connect(): Rx.Observable<rabbit.SubSocket> {
-      return <Rx.Observable<rabbit.SubSocket>>this.connectContext() 
-    }
     
     read(): Rx.Observable<any> {      
-      return this.connect()
+      return this.connectOnce<rabbit.SubSocket>()
       .selectMany(socket =>  
         RxNode.fromReadableStream(socket) 
       )
@@ -79,25 +82,18 @@ module rabbitRx {
   }
   
   export class RabbitPub extends RabbitBase {
-     
-    private socketStream: Rx.Observable<rabbit.PubSocket>;        
+             
     constructor(opts: IOpts) {
       super(opts);
     }
-            
-    private connectOnce(): Rx.Observable<rabbit.PubSocket> {
-      if (!this.socketStream) {
-        this.socketStream = <Rx.Observable<rabbit.PubSocket>>this.connectContext() 
-      }  
-      return this.socketStream;
-    }
-    
+                
     write(data: any) : Rx.Observable<any> {             
-      return this.connectOnce()
+      return this.connectOnce<rabbit.PubSocket>()
       .map(socket => 
         Rx.Observable.fromNodeCallback(socket.write, socket)(JSON.stringify(data))
       );
-    }    
+    }
+        
   }
 }
 
