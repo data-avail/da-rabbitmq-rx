@@ -7,20 +7,20 @@
     "test": "test"
   },
   "config": {
+    "RABBIT_URI": "127.0.0.1"
   },
   "scripts": {
     "build": "tsc",
     "test": "mocha"
   },
-  "repository" :
-  {
-     "type" : "git",
-      "url" : "https://github.com/data-avail/da-rabbitmq-rx"
-  },  
-  "bugs" : {
-     "url" : "https://github.com/data-avail/da-rabbitmq-rx/issues",
-      "email" : "max.putilov@gmail.com"    
-  }, 
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/data-avail/da-rabbitmq-rx"
+  },
+  "bugs": {
+    "url": "https://github.com/data-avail/da-rabbitmq-rx/issues",
+    "email": "max.putilov@gmail.com"
+  },
   "author": {
     "email": "max.putilov@gmail.com",
     "name": "Max Putilov",
@@ -28,13 +28,13 @@
   },
   "license": "MIT",
   "dependencies": {
+    "rabbit.js": "^0.4.4",
     "rx": "^2.5.3",
     "rx-node": "^1.0.1"
-    
-  }, 
-  "devDependencies" : {
+  },
+  "devDependencies": {
     "chai": "^3.2.0",
-    "mocha": "^2.2.5",    
+    "mocha": "^2.2.5",
     "typescript-require": "^0.2.9"
   }
 }
