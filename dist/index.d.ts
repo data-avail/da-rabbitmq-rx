@@ -1,5 +1,6 @@
 /// <reference path="../typings/tsd.d.ts" />
 import Rx = require("rx");
+import rabbit = require("rabbit.js");
 declare module rabbitRx {
     enum SocketType {
         PUB = 0,
@@ -15,16 +16,19 @@ declare module rabbitRx {
         private socketStream;
         constructor(opts: IOpts);
         private static connectSocket(queue, socket);
-        private connectContext();
+        connectContext(): Rx.Observable<rabbit.Socket>;
         protected connectOnce<T>(): Rx.Observable<T>;
     }
     class RabbitSub extends RabbitBase {
+        stream: Rx.Observable<any>;
         constructor(opts: IOpts);
-        read(): Rx.Observable<any>;
+        connect(): Rx.IDisposable;
     }
     class RabbitPub extends RabbitBase {
+        stream: Rx.Observable<rabbit.PubSocket>;
         constructor(opts: IOpts);
-        write(data: any): Rx.Observable<any>;
+        connect(): Rx.IDisposable;
+        write(data: any): Rx.Observable<boolean>;
     }
 }
 export = rabbitRx;

@@ -1,6 +1,7 @@
 ///<reference path="../typings/tsd.d.ts"/>
 import Rx = require("rx");
-var RxNode = require("rx-node");
+var 
+RxNode = require("rx-node");
 
 import rabbit = require("rabbit.js");
 
@@ -34,8 +35,8 @@ module rabbitRx {
             return socket; 
         });
     }
-        
-    private connectContext(): Rx.Observable<rabbit.Socket> {
+                
+    public connectContext(): Rx.Observable<rabbit.Socket> {
 
       var context = rabbit.createContext(this.opts.uri);
 
@@ -66,34 +67,55 @@ module rabbitRx {
 	 */
   export class RabbitSub extends RabbitBase {
 
+    public stream : Rx.Observable<any>;
     
     constructor(opts: IOpts) {
       super(opts);
     }
-    
-    read(): Rx.Observable<any> {      
-      return this.connectOnce<rabbit.SubSocket>()
-      .selectMany(socket =>  
+        
+    connect(): Rx.IDisposable {
+                 
+      var stream = this.connectOnce<rabbit.SubSocket>()
+      .flatMap(socket =>  
         RxNode.fromReadableStream(socket) 
       )
       .flatMap(JSON.parse)
-      .startWith(null);            
+      .publish();
+      this.stream = stream;
+      return stream.connect();
+        
     }
   }
   
   export class RabbitPub extends RabbitBase {
              
+    public stream : Rx.Observable<rabbit.PubSocket>;
+                   
     constructor(opts: IOpts) {
       super(opts);
     }
-                
-    write(data: any) : Rx.Observable<any> {             
-      return this.connectOnce<rabbit.PubSocket>()
-      .map(socket => 
-        Rx.Observable.fromNodeCallback(socket.write, socket)(JSON.stringify(data))
-      );
+    
+    connect() : Rx.IDisposable {             
+      var stream = this.connectOnce<rabbit.PubSocket>().replay(null, 1);
+      var disposable = stream.connect();
+      this.stream = stream;            
+      return disposable;      
     }
-        
+    
+    write(data: any) : Rx.Observable<boolean> {
+      //https://github.com/squaremo/rabbit.js/issues/55
+      var observable = Rx.Observable.create<boolean>(observer =>
+        this.stream.subscribe(socket => { 
+          observer.onNext(socket.write(JSON.stringify(data), "utf8"));
+          observer.onCompleted();
+        })
+      );      
+      
+      //always subscribe, should do even no subscribers 
+      var disposble = observable.subscribe(() => disposble.dispose());
+      
+      return observable;
+    }        
   }
 }
 

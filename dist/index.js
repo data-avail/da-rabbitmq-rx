@@ -56,13 +56,15 @@ var rabbitRx;
         function RabbitSub(opts) {
             _super.call(this, opts);
         }
-        RabbitSub.prototype.read = function () {
-            return this.connectOnce()
-                .selectMany(function (socket) {
+        RabbitSub.prototype.connect = function () {
+            var stream = this.connectOnce()
+                .flatMap(function (socket) {
                 return RxNode.fromReadableStream(socket);
             })
                 .flatMap(JSON.parse)
-                .startWith(null);
+                .publish();
+            this.stream = stream;
+            return stream.connect();
         };
         return RabbitSub;
     })(RabbitBase);
@@ -72,11 +74,22 @@ var rabbitRx;
         function RabbitPub(opts) {
             _super.call(this, opts);
         }
+        RabbitPub.prototype.connect = function () {
+            var stream = this.connectOnce().replay(null, 1);
+            var disposable = stream.connect();
+            this.stream = stream;
+            return disposable;
+        };
         RabbitPub.prototype.write = function (data) {
-            return this.connectOnce()
-                .map(function (socket) {
-                return Rx.Observable.fromNodeCallback(socket.write, socket)(JSON.stringify(data));
+            var _this = this;
+            var observable = Rx.Observable.create(function (observer) {
+                return _this.stream.subscribe(function (socket) {
+                    observer.onNext(socket.write(JSON.stringify(data), "utf8"));
+                    observer.onCompleted();
+                });
             });
+            var disposble = observable.subscribe(function () { return disposble.dispose(); });
+            return observable;
         };
         return RabbitPub;
     })(RabbitBase);

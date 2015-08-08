@@ -8,12 +8,14 @@ const RABBIT_URI = process.env.npm_config_RABBIT_URI || process.env.npm_package_
 
 describe("connect to rabbit and listen events",  () => {
 
-	it("fail to connect with wrong url",  (done) => {
+	it("fail to read with wrong url",  (done) => {
 		var opts = {uri : null, socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
-		sub.read().subscribeOnError((err) => {
+		var disposable = sub.connect();		
+		sub.stream.subscribeOnError((err) => {
 			expect(err).has.property("code");
 			expect(err.code).to.eql("ECONNREFUSED");
+			disposable.dispose();
 			done();
 		});																															
 	})
@@ -21,42 +23,35 @@ describe("connect to rabbit and listen events",  () => {
 	it("success to connect with valid url",  (done) => {
 		var opts = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
-		sub.read().subscribe((val) => {
+		var disposable = sub.connect();
+		//on connection stream subscribe is nto invoked	
+		/*	
+		sub.stream.subscribe((val) => {
 			expect(val, "first notification value is null, connection estabilished").to.be.null
 			done();
-		});																															
+		}, (err) => console.log(err), () => console.log("111"));
+		*/																															
 	})		
 		
-	it.skip("pub some message",  (done) => {
+	it.only("pub message",  (done) => {
 		
-		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};
+		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
 		var pub = new rabbitRx.RabbitPub(optsPub);
-		pub.write({test : true});		
-		pub.write({test : false});
-		//.subscribe((val) => console.log(val), null, done);
-		
-		/*
-		var optsSub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
-		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};
-		
-		var sub = new rabbitRx.RabbitSub(optsSub);
-		var pub = new rabbitRx.RabbitPub(optsPub);		
-		
-		var pubStream = pub.connect();
-		var subStream = sub.connect();
-		
-		//pubStream.merge(<any>subStream).
-		
-		.
-		.subscribe((val) => {
-			console.log(val);
-		}, null, done);
-		
-		pub.connect(optsPub);		
-		pub.pub({test : "ok"});
-		*/
-																																	
+				
+		var disposable = pub.connect();
+
+		pub.stream.subscribeOnNext((val) => {		
+			pub.write({test : false})
+			.concat(pub.write({test : true}))
+			.delay(1000) //can't determine when write completed, https://github.com/squaremo/rabbit.js/issues/55 
+			.subscribeOnCompleted(() => {			
+				disposable.dispose();
+				done();
+			})						
+		});																															
+																																							
 	})
+	
 	
 		
 }) 
