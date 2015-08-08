@@ -42,12 +42,6 @@ var rabbitRx;
                 return RabbitBase.connectSocket(_this.opts.queue, socket);
             });
         };
-        RabbitBase.prototype.connectOnce = function () {
-            if (!this.socketStream) {
-                this.socketStream = this.connectContext();
-            }
-            return this.socketStream;
-        };
         return RabbitBase;
     })();
     rabbitRx.RabbitBase = RabbitBase;
@@ -57,14 +51,15 @@ var rabbitRx;
             _super.call(this, opts);
         }
         RabbitSub.prototype.connect = function () {
-            var stream = this.connectOnce()
-                .flatMap(function (socket) {
+            var stream = _super.prototype.connectContext.call(this)
+                .map(function (socket) {
+                socket.setEncoding("utf8");
                 return RxNode.fromReadableStream(socket);
             })
-                .flatMap(JSON.parse)
-                .publish();
-            this.stream = stream;
-            return stream.connect();
+                .flatMap(function (val) { return val; })
+                .map(JSON.parse);
+            this.stream = stream.publish();
+            return this.stream.connect();
         };
         return RabbitSub;
     })(RabbitBase);
@@ -75,7 +70,7 @@ var rabbitRx;
             _super.call(this, opts);
         }
         RabbitPub.prototype.connect = function () {
-            var stream = this.connectOnce().replay(null, 1);
+            var stream = _super.prototype.connectContext.call(this).replay(null, 1);
             var disposable = stream.connect();
             this.stream = stream;
             return disposable;
@@ -88,7 +83,7 @@ var rabbitRx;
                     observer.onCompleted();
                 });
             });
-            var disposble = observable.subscribe(function () { return disposble.dispose(); });
+            var disposble = observable.subscribe(function () { });
             return observable;
         };
         return RabbitPub;

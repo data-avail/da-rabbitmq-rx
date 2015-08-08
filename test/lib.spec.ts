@@ -11,7 +11,7 @@ describe("connect to rabbit and listen events",  () => {
 	it("fail to read with wrong url",  (done) => {
 		var opts = {uri : null, socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
-		var disposable = sub.connect();		
+		var disposable = sub.connect();	 	
 		sub.stream.subscribeOnError((err) => {
 			expect(err).has.property("code");
 			expect(err.code).to.eql("ECONNREFUSED");
@@ -20,31 +20,59 @@ describe("connect to rabbit and listen events",  () => {
 		});																															
 	})
 	
-	it("success to connect with valid url",  (done) => {
+	
+	it.skip("connect to valid not existent uri, fail by timeout",  (done) => {
+		var opts = {uri : "amqp://1.1.1.1", socketType: rabbitRx.SocketType.SUB, queue : "test"};
+		var sub = new rabbitRx.RabbitSub(opts);
+		var disposable = sub.connect();		
+		sub.stream.subscribeOnError((err) => {
+			expect(err).has.property("code");
+			expect(err.code).to.eql("ETIMEDOUT");
+			disposable.dispose();
+			done();
+		});																															
+	})
+	
+	it("connect to valid, existent uri, check first message is null",  (done) => {
 		var opts = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
-		var disposable = sub.connect();
-		//on connection stream subscribe is nto invoked	
-		/*	
+		var disposable = sub.connect();		
 		sub.stream.subscribe((val) => {
-			expect(val, "first notification value is null, connection estabilished").to.be.null
+			expect(val).is.null
+			disposable.dispose();
 			done();
-		}, (err) => console.log(err), () => console.log("111"));
-		*/																															
-	})		
-		
-	it.only("pub message",  (done) => {
+		});																															
+	})
+
+	it("connect 2 subscribers to valid, existent uri, check first messages is null",  (done) => {
+		var opts = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
+		var sub = new rabbitRx.RabbitSub(opts);
+		var disposable = sub.connect();		
+		var stream1 = sub.stream.map(val => val);
+		var stream2 = sub.stream.map(val => val);
+		stream1.zip(stream2, (val1, val2) => [val1, val2])
+		.subscribe((val) => {
+			expect(val).have.lengthOf(2);
+			expect(val[0]).is.null;
+			expect(val[1]).is.null;
+			disposable.dispose();
+			done();
+		});																															
+	})
+			
+	it("publish message",  (done) => {
 		
 		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
 		var pub = new rabbitRx.RabbitPub(optsPub);
 				
 		var disposable = pub.connect();
 
-		pub.stream.subscribeOnNext((val) => {		
+		var writeDisposable = pub.stream.subscribeOnNext((val) => {		
 			pub.write({test : false})
 			.concat(pub.write({test : true}))
 			.delay(1000) //can't determine when write completed, https://github.com/squaremo/rabbit.js/issues/55 
-			.subscribeOnCompleted(() => {			
+			.subscribeOnCompleted(() => {
+				writeDisposable.dispose();			
 				disposable.dispose();
 				done();
 			})						
@@ -52,6 +80,29 @@ describe("connect to rabbit and listen events",  () => {
 																																							
 	})
 	
+
+	it.only("subscribe and publish message",  (done) => {
+		
+		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
+		var optsSub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
+		var pub = new rabbitRx.RabbitPub(optsPub);
+		var sub = new rabbitRx.RabbitSub(optsSub);
+				
+		var disposablePub = pub.connect();
+		var disposableSub = sub.connect();
+		
+		sub.stream.subscribe(val => {
+			console.log(val);
+			expect(val).eql({test : "ping"});
+			done();
+		});
+		
+		//sub.stream.take(1).subscribe(val => pub.write({test : "ping"}));
+		setTimeout(() =>				
+			pub.write({test : "ping"})
+			, 500); 
+																																							
+	})
 	
 		
 }) 

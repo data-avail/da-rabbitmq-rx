@@ -13,11 +13,9 @@ declare module rabbitRx {
     }
     class RabbitBase {
         private opts;
-        private socketStream;
         constructor(opts: IOpts);
         private static connectSocket(queue, socket);
-        connectContext(): Rx.Observable<rabbit.Socket>;
-        protected connectOnce<T>(): Rx.Observable<T>;
+        protected connectContext(): Rx.Observable<rabbit.Socket>;
     }
     class RabbitSub extends RabbitBase {
         stream: Rx.Observable<any>;

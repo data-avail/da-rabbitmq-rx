@@ -14,15 +14,26 @@ module rabbitRx {
     PUB, SUB
   }
   
+  /**
+   * Connection options
+   */
   export interface IOpts {
+    /**
+     * Rabbit service URI
+     */
     uri: string
+    /**
+     * Socket type
+     */
     socketType: SocketType
+    /**
+     * Queue name
+     */
     queue: string
   }
   
   export class RabbitBase {
     
-    private socketStream: Rx.Observable<rabbit.Socket>;
     constructor(private opts: IOpts) {      
     }       
     
@@ -36,7 +47,7 @@ module rabbitRx {
         });
     }
                 
-    public connectContext(): Rx.Observable<rabbit.Socket> {
+    protected connectContext(): Rx.Observable<rabbit.Socket> {
 
       var context = rabbit.createContext(this.opts.uri);
 
@@ -54,56 +65,86 @@ module rabbitRx {
       );    
     }        
     
-    protected connectOnce<T>() : Rx.Observable<T>{
-      if (!this.socketStream) {
-        this.socketStream = this.connectContext(); 
-      }
-      return <any>this.socketStream;
-    }
   }
         
 	/**
-	 * Subscribe to rabbit queue
+	 * Create class, to coonect and subscribe to some queue events
 	 */
   export class RabbitSub extends RabbitBase {
-
+ 
+    /**
+     * Hot observable, stream events from queue.
+     */
     public stream : Rx.Observable<any>;
     
     constructor(opts: IOpts) {
       super(opts);
     }
         
-    connect(): Rx.IDisposable {
-                 
-      var stream = this.connectOnce<rabbit.SubSocket>()
-      .flatMap(socket =>  
-        RxNode.fromReadableStream(socket) 
-      )
-      .flatMap(JSON.parse)
-      .publish();
-      this.stream = stream;
-      return stream.connect();
-        
+    /**
+     * Connect to queue and initailize stream field.
+     * Every time connect method invoked, new connection created,
+     * stream field updated.
+     * You should dispose pervious connections yourself.
+     * Connection won't be made until subscription on stream field.
+     * @return
+     * Disposable object to close connection.
+     */        
+    connect(): Rx.IDisposable {                 
+      var stream = super.connectContext()
+      .map((socket: rabbit.SubSocket) => {
+        socket.setEncoding("utf8");         
+        return RxNode.fromReadableStream(socket);
+      })
+      .flatMap(val => val)
+      .map(<any>JSON.parse);//WTF ?      
+      this.stream = stream.publish();            
+      return (<any>this.stream).connect();      
     }
   }
   
   export class RabbitPub extends RabbitBase {
-             
+       
+    /**
+     * Hot observable, for all subscribers return 
+     * onNext, when connection established
+     * onSuccess - when completed and onError - when some error
+     */             
     public stream : Rx.Observable<rabbit.PubSocket>;
                    
     constructor(opts: IOpts) {
       super(opts);
     }
     
-    connect() : Rx.IDisposable {             
-      var stream = this.connectOnce<rabbit.PubSocket>().replay(null, 1);
+    /**
+     * Connect to queue to publish messages.
+     * Every time connect method invoked, new connection created,
+     * stream field updated.
+     * You should dispose pervious connections yourself.
+     * @return
+     * Disposable object to close connection.   
+     */
+    connect() : Rx.IDisposable {  
+      //each write to a single stream           
+      var stream = super.connectContext().replay(null, 1);
       var disposable = stream.connect();
-      this.stream = stream;            
+      this.stream = <any>stream;            
       return disposable;      
     }
     
-    write(data: any) : Rx.Observable<boolean> {
-      //https://github.com/squaremo/rabbit.js/issues/55
+    /**
+     * Write data to connected queue.
+     * @params
+     * data
+     * JSON object to write
+     * @return
+     * Suppose to return write status.
+     * Once onNext with true then onComplete(), if success
+     * onError when failed.
+     * Now this is a stub, see
+     * //https://github.com/squaremo/rabbit.js/issues/55 
+     */
+    write(data: any) : Rx.Observable<boolean> {      
       var observable = Rx.Observable.create<boolean>(observer =>
         this.stream.subscribe(socket => { 
           observer.onNext(socket.write(JSON.stringify(data), "utf8"));
@@ -111,8 +152,9 @@ module rabbitRx {
         })
       );      
       
-      //always subscribe, should do even no subscribers 
-      var disposble = observable.subscribe(() => disposble.dispose());
+      //always subscribe
+      //write method should do work even without subscribers 
+      var disposble = observable.subscribe(() => {/*disposble.dispose()*/});
       
       return observable;
     }        
