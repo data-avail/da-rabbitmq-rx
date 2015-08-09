@@ -8,12 +8,29 @@ Contains typeScript defintion files.
 
 [Documentation](https://data-avail.github.io/da-rabbitmq-rx)
 
+### Description
+
+Allow to connect, subscribe and publish rabbitmq messages in reactive style.
+
+#### For subscriptions, use `RabbitSub` class
+
++ First to create subscription stream invoke `connect` method.
++ Next subscribe to `stream` field. First `onNext` is always 
+notification about sucessfull connection, skip it if not intersted.
+
+#### For publishing, use `RabbitPub` class
++ First to create publisher invoke `connect` method.
++ You can subscribe to `connectStream` field in order to know when
+connection estabilished.
++ You could write data without waiting connection to complete.
+Data will be send when connection estabilished.
+
 ## Test
 
-Set up uri for test db 
+Set up uri for RABBITMQ 
 
-+ In `.npmrc` set `SOME_URI=xxx`, higest priority
-+ In `package.json` field `config.SOME_URI`
++ In `.npmrc` set `RABBIT_URI=xxx`, higest priority
++ In `package.json` field `config.RABBIT_URI`
 
 Run test
  
