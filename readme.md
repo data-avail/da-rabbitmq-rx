@@ -2,15 +2,7 @@
 
 [![Build Status](https://travis-ci.org/data-avail/da-rabbitmq-rx.svg?branch=master)](https://travis-ci.org/data-avail/da-rabbitmq-rx)
 
-Project description.
-
-Contains typeScript defintion files. 
-
-[Documentation](https://data-avail.github.io/da-rabbitmq-rx)
-
-### Description
-
-Allow to connect, subscribe and publish rabbitmq messages in reactive style.
+## Description
 
 #### For subscriptions, use `RabbitSub` class
 
@@ -24,6 +16,12 @@ notification about sucessfull connection, skip it if not intersted.
 connection estabilished.
 + You could write data without waiting connection to complete.
 Data will be send when connection estabilished.
+
+Allow to connect, subscribe and publish rabbitmq messages in reactive style.
+
+Contains typeScript defintion files. 
+
+[Documentation](https://data-avail.github.io/da-rabbitmq-rx)
 
 ## Test
 
