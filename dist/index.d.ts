@@ -23,7 +23,7 @@ declare module rabbitRx {
         connect(): Rx.IDisposable;
     }
     class RabbitPub extends RabbitBase {
-        stream: Rx.Observable<rabbit.PubSocket>;
+        connectStream: Rx.Observable<rabbit.PubSocket>;
         constructor(opts: IOpts);
         connect(): Rx.IDisposable;
         write(data: any): Rx.Observable<boolean>;

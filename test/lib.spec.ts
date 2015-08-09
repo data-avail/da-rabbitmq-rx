@@ -67,7 +67,7 @@ describe("connect to rabbit and listen events",  () => {
 				
 		var disposable = pub.connect();
 
-		var writeDisposable = pub.stream.subscribeOnNext((val) => {		
+		var writeDisposable = pub.connectStream.subscribeOnNext((val) => {		
 			pub.write({test : false})
 			.concat(pub.write({test : true}))
 			.delay(1000) //can't determine when write completed, https://github.com/squaremo/rabbit.js/issues/55 
@@ -81,7 +81,7 @@ describe("connect to rabbit and listen events",  () => {
 	})
 	
 
-	it.only("subscribe and publish message",  (done) => {
+	it("subscribe and publish message",  (done) => {
 		
 		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
 		var optsSub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
@@ -91,17 +91,14 @@ describe("connect to rabbit and listen events",  () => {
 		var disposablePub = pub.connect();
 		var disposableSub = sub.connect();
 		
-		sub.stream.subscribe(val => {
+		sub.stream.skip(1).subscribe(val => {
 			console.log(val);
 			expect(val).eql({test : "ping"});
 			done();
 		});
 		
-		//sub.stream.take(1).subscribe(val => pub.write({test : "ping"}));
-		setTimeout(() =>				
-			pub.write({test : "ping"})
-			, 500); 
-																																							
+		sub.stream.take(1).subscribe(val => 
+			pub.write({test : "ping"}));																																							
 	})
 	
 		

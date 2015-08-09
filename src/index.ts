@@ -83,6 +83,9 @@ module rabbitRx {
         
     /**
      * Connect to queue and initailize stream field.
+     * When connection sucessfully established, first onNext
+     * invoked with null value, if you not interseted in time 
+     * when connection esabilished, skip this first event.  
      * Every time connect method invoked, new connection created,
      * stream field updated.
      * You should dispose pervious connections yourself.
@@ -94,10 +97,11 @@ module rabbitRx {
       var stream = super.connectContext()
       .map((socket: rabbit.SubSocket) => {
         socket.setEncoding("utf8");         
-        return RxNode.fromReadableStream(socket);
+        return Rx.Observable.return(null).concat( 
+        RxNode.fromReadableStream(socket));
       })
       .flatMap(val => val)
-      .map(<any>JSON.parse);//WTF ?      
+      .map((val: string) => val ?  <any>JSON.parse(val) : null);     
       this.stream = stream.publish();            
       return (<any>this.stream).connect();      
     }
@@ -110,7 +114,7 @@ module rabbitRx {
      * onNext, when connection established
      * onSuccess - when completed and onError - when some error
      */             
-    public stream : Rx.Observable<rabbit.PubSocket>;
+    public connectStream : Rx.Observable<rabbit.PubSocket>;
                    
     constructor(opts: IOpts) {
       super(opts);
@@ -128,7 +132,7 @@ module rabbitRx {
       //each write to a single stream           
       var stream = super.connectContext().replay(null, 1);
       var disposable = stream.connect();
-      this.stream = <any>stream;            
+      this.connectStream = <any>stream;            
       return disposable;      
     }
     
@@ -146,7 +150,7 @@ module rabbitRx {
      */
     write(data: any) : Rx.Observable<boolean> {      
       var observable = Rx.Observable.create<boolean>(observer =>
-        this.stream.subscribe(socket => { 
+        this.connectStream.subscribe(socket => { 
           observer.onNext(socket.write(JSON.stringify(data), "utf8"));
           observer.onCompleted();
         })
@@ -154,8 +158,8 @@ module rabbitRx {
       
       //always subscribe
       //write method should do work even without subscribers 
-      var disposble = observable.subscribe(() => {disposble.dispose()});
-      
+      var disposable = observable.subscribe(() => {/*disposble.dispose()*/});
+            
       return observable;
     }        
   }
