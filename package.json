@@ -7,7 +7,7 @@
     "test": "test"
   },
   "config": {
-    "RABBIT_URI": "amqp://guest:guest@/vhost"
+    "RABBIT_URI": "amqp://guest:guest@/%2f"
   },
   "scripts": {
     "build": "tsc",
