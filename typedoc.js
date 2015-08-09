@@ -2,6 +2,6 @@ module.exports = {
 	out: "doc/",
 	excludeExternals: true,
 	"module": "commonjs",
-	"mode": "modules",
+	"mode": "file",
 	"excludeNotExported": false
 }

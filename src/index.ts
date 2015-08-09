@@ -82,7 +82,7 @@ module rabbitRx {
     }
         
     /**
-     * Connect to queue and initailize stream field.
+     * Conect to queue and initailize stream field.
      * When connection sucessfully established, first onNext
      * invoked with null value, if you not interseted in time 
      * when connection esabilished, skip this first event.  

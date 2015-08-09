@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IOpts | da-rabbitmq-rx</title>
+	<title>RabbitSub | da-rabbitmq-rx</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,16 +55,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_index_.html">&quot;index&quot;</a>
+					<a href="../modules/rabbitrx.html">rabbitRx</a>
 				</li>
 				<li>
-					<a href="../modules/_index_.rabbitrx.html">rabbitRx</a>
-				</li>
-				<li>
-					<a href="_index_.rabbitrx.iopts.html">IOpts</a>
+					<a href="rabbitrx.rabbitsub.html">RabbitSub</a>
 				</li>
 			</ul>
-			<h1>Interface IOpts</h1>
+			<h1>Class RabbitSub</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +71,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Connection options</p>
+						<p>Create class, to coonect and subscribe to some queue events</p>
 					</div>
 				</div>
 			</section>
@@ -82,7 +79,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IOpts</span>
+						<a href="rabbitrx.rabbitbase.html" class="tsd-signature-type">RabbitBase</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">RabbitSub</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -91,62 +93,121 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="rabbitrx.rabbitsub.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.rabbitrx.iopts.html#queue" class="tsd-kind-icon">queue</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.rabbitrx.iopts.html#sockettype" class="tsd-kind-icon">socket<wbr>Type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_index_.rabbitrx.iopts.html#uri" class="tsd-kind-icon">uri</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="rabbitrx.rabbitsub.html#stream" class="tsd-kind-icon">stream</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="rabbitrx.rabbitsub.html#connect" class="tsd-kind-icon">connect</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="rabbitrx.rabbitsub.html#connectcontext" class="tsd-kind-icon">connect<wbr>Context</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Rabbit<wbr>Sub<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/rabbitrx.iopts.html" class="tsd-signature-type">IOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="rabbitrx.rabbitsub.html" class="tsd-signature-type">RabbitSub</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overwrites <a href="rabbitrx.rabbitbase.html">RabbitBase</a>.<a href="rabbitrx.rabbitbase.html#constructor">constructor</a></p>
+								<ul>
+									<li>Defined in index.ts:78</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>opts: <a href="../interfaces/rabbitrx.iopts.html" class="tsd-signature-type">IOpts</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="rabbitrx.rabbitsub.html" class="tsd-signature-type">RabbitSub</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="queue" class="tsd-anchor"></a>
-					<h3>queue</h3>
-					<div class="tsd-signature tsd-kind-icon">queue<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="stream" class="tsd-anchor"></a>
+					<h3>stream</h3>
+					<div class="tsd-signature tsd-kind-icon">stream<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in index.ts:32</li>
+							<li>Defined in index.ts:78</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Queue name</p>
+							<p>Hot observable, stream events from queue.</p>
 						</div>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sockettype" class="tsd-anchor"></a>
-					<h3>socket<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">socket<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../enums/_index_.rabbitrx.sockettype.html" class="tsd-signature-type">SocketType</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in index.ts:28</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Socket type</p>
-						</div>
-					</div>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="connect" class="tsd-anchor"></a>
+					<h3>connect</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IDisposable</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in index.ts:96</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Connect to queue and initailize stream field.
+										When connection sucessfully established, first onNext
+										invoked with null value, if you not interseted in time
+										when connection esabilished, skip this first event.
+										Every time connect method invoked, new connection created,
+										stream field updated.
+										You should dispose pervious connections yourself.
+									Connection won&#39;t be made until subscription on stream field.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IDisposable</span></h4>
+							<p>Disposable object to close connection.</p>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="uri" class="tsd-anchor"></a>
-					<h3>uri</h3>
-					<div class="tsd-signature tsd-kind-icon">uri<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in index.ts:24</li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Rabbit service URI</p>
-						</div>
-					</div>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+					<a name="connectcontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> connect<wbr>Context</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">connect<wbr>Context<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">rabbit.Socket</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="rabbitrx.rabbitbase.html">RabbitBase</a>.<a href="rabbitrx.rabbitbase.html#connectcontext">connectContext</a></p>
+								<ul>
+									<li>Defined in index.ts:50</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Observable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">rabbit.Socket</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -156,40 +217,46 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/rabbitrx.html">rabbit<wbr>Rx</a>
+					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/_index_.rabbitrx.sockettype.html" class="tsd-kind-icon">Socket<wbr>Type</a>
+						<a href="../enums/rabbitrx.sockettype.html" class="tsd-kind-icon">Socket<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_index_.rabbitrx.rabbitbase.html" class="tsd-kind-icon">Rabbit<wbr>Base</a>
+						<a href="rabbitrx.rabbitbase.html" class="tsd-kind-icon">Rabbit<wbr>Base</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_index_.rabbitrx.rabbitpub.html" class="tsd-kind-icon">Rabbit<wbr>Pub</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_index_.rabbitrx.rabbitsub.html" class="tsd-kind-icon">Rabbit<wbr>Sub</a>
+						<a href="rabbitrx.rabbitpub.html" class="tsd-kind-icon">Rabbit<wbr>Pub</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_index_.rabbitrx.iopts.html" class="tsd-kind-icon">IOpts</a>
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="rabbitrx.rabbitsub.html" class="tsd-kind-icon">Rabbit<wbr>Sub</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.rabbitrx.iopts.html#queue" class="tsd-kind-icon">queue</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+								<a href="rabbitrx.rabbitsub.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.rabbitrx.iopts.html#sockettype" class="tsd-kind-icon">socket<wbr>Type</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="rabbitrx.rabbitsub.html#stream" class="tsd-kind-icon">stream</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_index_.rabbitrx.iopts.html#uri" class="tsd-kind-icon">uri</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="rabbitrx.rabbitsub.html#connect" class="tsd-kind-icon">connect</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+								<a href="rabbitrx.rabbitsub.html#connectcontext" class="tsd-kind-icon">connect<wbr>Context</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/rabbitrx.iopts.html" class="tsd-kind-icon">IOpts</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
