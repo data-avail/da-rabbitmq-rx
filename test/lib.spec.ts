@@ -69,15 +69,28 @@ describe("connect to rabbit and listen events",  () => {
 
 		var writeDisposable = pub.connectStream.subscribeOnNext((val) => {		
 			pub.write({test : false})
-			.concat(pub.write({test : true}))
-			.delay(1000) //can't determine when write completed, https://github.com/squaremo/rabbit.js/issues/55 
+			.concat(pub.write({test : true}))		 
 			.subscribeOnCompleted(() => {
 				writeDisposable.dispose();			
 				disposable.dispose();
 				done();
 			})						
-		});																															
-																																							
+		});																																																																						
+	})
+
+	it("publish message, don't wait till connection stream completed",  (done) => {
+		
+		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
+		var pub = new rabbitRx.RabbitPub(optsPub);
+				
+		var disposable = pub.connect();
+		
+		pub.write({test : false})
+		.concat(pub.write({test : true})) 
+		.subscribeOnCompleted(() => {			
+			disposable.dispose();
+			done();
+		})																																																																										
 	})
 	
 

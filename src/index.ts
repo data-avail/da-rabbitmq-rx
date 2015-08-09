@@ -111,7 +111,7 @@ module rabbitRx {
        
     /**
      * Hot observable, for all subscribers return 
-     * onNext, when connection established
+     * onNext, when connection established, even when connection was made before
      * onSuccess - when completed and onError - when some error
      */             
     public connectStream : Rx.Observable<rabbit.PubSocket>;
