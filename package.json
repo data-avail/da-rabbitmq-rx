@@ -7,7 +7,7 @@
     "test": "test"
   },
   "config": {
-    "RABBIT_URI": "127.0.0.1"
+    "RABBIT_URI": "amqp://127.0.0.1"
   },
   "scripts": {
     "build": "tsc",
