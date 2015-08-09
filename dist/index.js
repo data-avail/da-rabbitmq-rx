@@ -83,7 +83,7 @@ var rabbitRx;
                     observer.onCompleted();
                 });
             });
-            var disposable = observable.subscribe(function () { });
+            var disposable = observable.subscribe(function () { disposable.dispose(); });
             return observable;
         };
         return RabbitPub;

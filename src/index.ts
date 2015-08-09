@@ -158,8 +158,9 @@ module rabbitRx {
       
       //always subscribe
       //write method should do work even without subscribers 
-      var disposable = observable.subscribe(() => {/*disposble.dispose()*/});
-            
+      var disposable = observable.subscribe(() => {disposable.dispose()});
+      
+                 
       return observable;
     }        
   }

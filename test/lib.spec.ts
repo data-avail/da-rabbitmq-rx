@@ -19,8 +19,7 @@ describe("connect to rabbit and listen events",  () => {
 			done();
 		});																															
 	})
-	
-	
+		
 	it.skip("connect to valid not existent uri, fail by timeout",  (done) => {
 		var opts = {uri : "amqp://1.1.1.1", socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
@@ -90,10 +89,9 @@ describe("connect to rabbit and listen events",  () => {
 		.subscribeOnCompleted(() => {			
 			disposable.dispose();
 			done();
-		})																																																																										
+		})																																																																									
 	})
 	
-
 	it("subscribe and publish message",  (done) => {
 		
 		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
@@ -104,14 +102,16 @@ describe("connect to rabbit and listen events",  () => {
 		var disposablePub = pub.connect();
 		var disposableSub = sub.connect();
 		
-		sub.stream.skip(1).subscribe(val => {
-			console.log(val);
+		var disposable1 = sub.stream.skip(1).subscribe(val => {
 			expect(val).eql({test : "ping"});
+			disposable1.dispose();
 			done();
 		});
 		
-		sub.stream.take(1).subscribe(val => 
-			pub.write({test : "ping"}));																																							
+		var disposable2 = sub.stream.take(1).subscribe(val => {		 
+			pub.write({test : "ping"});
+			disposable2.dispose();
+		});																																							
 	})
 	
 		
