@@ -50,8 +50,14 @@ This way use `tsc -w` in console and then run test task manually,
 when neccessary.   
 
 ## Documentation 
-Checkout pages branch to publish on `github`
+
 
 Generate `typedoc ./src/index.ts`
 
-`git checkout --orphan gh-pages` 
+To publish docs  on `github`
+```
+git checkout --orphan gh-pages
+git add --all .
+git commit -am "first commit"
+git push origin gh-pages
+``` 
