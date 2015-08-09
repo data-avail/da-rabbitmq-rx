@@ -1,2 +1,2 @@
 --compilers ts:typescript-require
---timeout 5000
+--timeout 2000

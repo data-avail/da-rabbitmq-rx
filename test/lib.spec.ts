@@ -8,7 +8,7 @@ const RABBIT_URI = process.env.npm_config_RABBIT_URI || process.env.npm_package_
 
 describe("connect to rabbit and listen events",  () => {
 
-	it("fail to read with wrong url",  (done) => {
+	it.skip("fail to read with wrong url",  (done) => {
 		var opts = {uri : null, socketType: rabbitRx.SocketType.SUB, queue : "test"};
 		var sub = new rabbitRx.RabbitSub(opts);
 		var disposable = sub.connect();	 	
