@@ -51,4 +51,13 @@ when neccessary.
 
 ## Documentation 
 
-Generate `typedoc ./src/index.ts` 
+Generate `typedoc ./src/index.ts`
+
+To publish docs  on `github`
+```
+git checkout --orphan gh-pages
+git add --all .
+git commit -am "first commit"
+git push origin gh-pages
+``` 
+
