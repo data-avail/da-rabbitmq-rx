@@ -1,11 +1,7 @@
-/// <reference path="../typings/tsd.d.ts" />
+
 import Rx = require("rx");
 import rabbit = require("rabbit.js");
 declare module rabbitRx {
-    /** #dts-build
-    import Rx = require("rx");
-    import rabbit = require("rabbit.js");
-    #dts-build */
     enum SocketType {
         PUB = 0,
         SUB = 1,

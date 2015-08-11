@@ -1,6 +1,6 @@
 {
   "name": "da-rabbitmq-rx",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/index.js",
   "directories": {
@@ -10,8 +10,8 @@
     "RABBIT_URI": "amqp://guest:guest@"
   },
   "scripts": {
-    "build": "tsc",
-    "test": "mocha"
+    "build": "gulp build",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,11 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "gulp": "^3.9.0",
+    "gulp-replace": "^0.5.4",
+    "gulp-spawn-mocha": "^2.2.1",
+    "gulp-typescript": "^2.8.0",
+    "merge2": "^0.3.6",
     "mocha": "^2.2.5",
     "typescript-require": "^0.2.9"
   }

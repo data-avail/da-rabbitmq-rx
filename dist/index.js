@@ -4,16 +4,12 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-///<reference path="../typings/tsd.d.ts"/>
+
 var Rx = require("rx");
 var rabbit = require("rabbit.js");
 var RxNode = require("rx-node");
 var rabbitRx;
 (function (rabbitRx) {
-    /** #dts-build
-    import Rx = require("rx");
-    import rabbit = require("rabbit.js");
-    #dts-build */
     (function (SocketType) {
         SocketType[SocketType["PUB"] = 0] = "PUB";
         SocketType[SocketType["SUB"] = 1] = "SUB";
