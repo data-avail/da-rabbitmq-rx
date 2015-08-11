@@ -1,15 +1,10 @@
 ///<reference path="../typings/tsd.d.ts"/>
 import Rx = require("rx");
-var 
-RxNode = require("rx-node");
-
 import rabbit = require("rabbit.js");
+var RxNode = require("rx-node");
 
-/**
- * My library
- */
 module rabbitRx {
-
+  
   export enum SocketType {
     PUB, SUB
   }
@@ -159,8 +154,7 @@ module rabbitRx {
       //always subscribe
       //write method should do work even without subscribers 
       var disposable = observable.subscribe(() => {disposable.dispose()});
-      
-                 
+                       
       return observable;
     }        
   }

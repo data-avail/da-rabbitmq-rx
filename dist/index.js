@@ -6,10 +6,14 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 ///<reference path="../typings/tsd.d.ts"/>
 var Rx = require("rx");
-var RxNode = require("rx-node");
 var rabbit = require("rabbit.js");
+var RxNode = require("rx-node");
 var rabbitRx;
 (function (rabbitRx) {
+    /** #dts-build
+    import Rx = require("rx");
+    import rabbit = require("rabbit.js");
+    #dts-build */
     (function (SocketType) {
         SocketType[SocketType["PUB"] = 0] = "PUB";
         SocketType[SocketType["SUB"] = 1] = "SUB";
@@ -45,11 +49,26 @@ var rabbitRx;
         return RabbitBase;
     })();
     rabbitRx.RabbitBase = RabbitBase;
+    /**
+     * Create class, to coonect and subscribe to some queue events
+     */
     var RabbitSub = (function (_super) {
         __extends(RabbitSub, _super);
         function RabbitSub(opts) {
             _super.call(this, opts);
         }
+        /**
+         * Conect to queue and initailize stream field.
+         * When connection sucessfully established, first onNext
+         * invoked with null value, if you not interseted in time
+         * when connection esabilished, skip this first event.
+         * Every time connect method invoked, new connection created,
+         * stream field updated.
+         * You should dispose pervious connections yourself.
+         * Connection won't be made until subscription on stream field.
+         * @return
+         * Disposable object to close connection.
+         */
         RabbitSub.prototype.connect = function () {
             var stream = _super.prototype.connectContext.call(this)
                 .map(function (socket) {
@@ -69,12 +88,33 @@ var rabbitRx;
         function RabbitPub(opts) {
             _super.call(this, opts);
         }
+        /**
+         * Connect to queue to publish messages.
+         * Every time connect method invoked, new connection created,
+         * stream field updated.
+         * You should dispose pervious connections yourself.
+         * @return
+         * Disposable object to close connection.
+         */
         RabbitPub.prototype.connect = function () {
+            //each write to a single stream           
             var stream = _super.prototype.connectContext.call(this).replay(null, 1);
             var disposable = stream.connect();
             this.connectStream = stream;
             return disposable;
         };
+        /**
+         * Write data to connected queue.
+         * @params
+         * data
+         * JSON object to write
+         * @return
+         * Suppose to return write status.
+         * Once onNext with true then onComplete(), if success
+         * onError when failed.
+         * Now this is a stub, see
+         * //https://github.com/squaremo/rabbit.js/issues/55
+         */
         RabbitPub.prototype.write = function (data) {
             var _this = this;
             var observable = Rx.Observable.create(function (observer) {
@@ -83,6 +123,8 @@ var rabbitRx;
                     observer.onCompleted();
                 });
             });
+            //always subscribe
+            //write method should do work even without subscribers 
             var disposable = observable.subscribe(function () { disposable.dispose(); });
             return observable;
         };
