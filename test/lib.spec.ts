@@ -114,5 +114,29 @@ describe("connect to rabbit and listen events",  () => {
 		});																																							
 	})
 	
+
+	it("subscribe and publish many message",  (done) => {
+		
+		var optsPub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.PUB, queue : "test"};				
+		var optsSub = {uri : RABBIT_URI, socketType: rabbitRx.SocketType.SUB, queue : "test"};
+		var pub = new rabbitRx.RabbitPub(optsPub);
+		var sub = new rabbitRx.RabbitSub(optsSub);
+				
+		var disposablePub = pub.connect();
+		var disposableSub = sub.connect();
+		
+		var disposable1 = sub.stream.skip(1).subscribe(val => {
+			expect(val).eql({test : "ping"});
+		});
+		
+		var disposable2 = sub.stream.take(1).subscribe(val => {
+			var i = 0;		 
+			while(i ++ < 100) {
+				pub.write({test : "ping"});
+			}
+		});		
+		
+		setTimeout(done, 1500);																																					
+	})
 		
 }) 

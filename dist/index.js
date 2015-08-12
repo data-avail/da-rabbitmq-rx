@@ -120,8 +120,8 @@ var rabbitRx;
                 });
             });
             //always subscribe
-            //write method should do work even without subscribers 
-            var disposable = observable.subscribe(function () { disposable.dispose(); });
+            //write method should do work even without subscribers      
+            observable.subscribe(function () { });
             return observable;
         };
         return RabbitPub;

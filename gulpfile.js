@@ -11,8 +11,6 @@ var REF_REGEXP = /^\/\/\/\s*<reference\s+path=['"].*['"]\s*\/>\s*$/gm;
 
 gulp.task('build', function() {
 
-    //build conactinated version of source
-    //no module and node exports
     
     var tsResult =  tsProject.src()
         .pipe(ts(tsProject));

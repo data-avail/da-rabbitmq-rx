@@ -148,12 +148,12 @@ module rabbitRx {
         this.connectStream.subscribe(socket => { 
           observer.onNext(socket.write(JSON.stringify(data), "utf8"));
           observer.onCompleted();
-        })
+      })
       );      
       
       //always subscribe
-      //write method should do work even without subscribers 
-      var disposable = observable.subscribe(() => {disposable.dispose()});
+      //write method should do work even without subscribers      
+      observable.subscribe(() => {});
                        
       return observable;
     }        
