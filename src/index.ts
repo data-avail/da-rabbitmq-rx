@@ -145,24 +145,25 @@ module rabbitRx {
      */
     write(data: any) : Rx.Observable<boolean> {      
 
-      /*
+      
       var observable = Rx.Observable.create<boolean>(observer =>
         this.connectStream.subscribe(socket => { 
           observer.onNext(socket.write(JSON.stringify(data), "utf8"));
           observer.onCompleted();
       })
       );
-      */      
+            
       
       //always subscribe
       //write method should do work even without subscribers      
-      //observable.subscribe(() => {});
+      observable.subscribe(() => {
+      });
+      /*
       this.connectStream.subscribe(socket => { 
           socket.write(JSON.stringify(data), "utf8");
       });
-
-                       
-      return Rx.Observable.return(true);
+      */                       
+      return observable;
     }        
   }
 }

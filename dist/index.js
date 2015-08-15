@@ -112,21 +112,23 @@ var rabbitRx;
          * //https://github.com/squaremo/rabbit.js/issues/55
          */
         RabbitPub.prototype.write = function (data) {
-            /*
-            var observable = Rx.Observable.create<boolean>(observer =>
-              this.connectStream.subscribe(socket => {
-                observer.onNext(socket.write(JSON.stringify(data), "utf8"));
-                observer.onCompleted();
-            })
-            );
-            */
+            var _this = this;
+            var observable = Rx.Observable.create(function (observer) {
+                return _this.connectStream.subscribe(function (socket) {
+                    observer.onNext(socket.write(JSON.stringify(data), "utf8"));
+                    observer.onCompleted();
+                });
+            });
             //always subscribe
             //write method should do work even without subscribers      
-            //observable.subscribe(() => {});
-            this.connectStream.subscribe(function (socket) {
+            observable.subscribe(function () {
+            });
+            /*
+            this.connectStream.subscribe(socket => {
                 socket.write(JSON.stringify(data), "utf8");
             });
-            return Rx.Observable.return(true);
+            */
+            return observable;
         };
         return RabbitPub;
     })(RabbitBase);
