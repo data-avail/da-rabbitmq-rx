@@ -4,7 +4,13 @@ import chai = require('chai');
 import rabbitRx = require('../dist/index');
 var expect = chai.expect;
 
-const RABBIT_URI = process.env.npm_config_RABBIT_URI || process.env.npm_package_config_RABBIT_URI;
+function getEnvVar(name: string) : string {
+	return process.env[name] || 
+	process.env["npm_config_" + name] || 
+	process.env["npm_package_config_" + name];	
+}
+
+const RABBIT_URI = getEnvVar("RABBIT_URI_TEST");
 
 describe("connect to rabbit and listen events",  () => {
 

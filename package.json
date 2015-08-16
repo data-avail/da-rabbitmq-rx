@@ -7,7 +7,7 @@
     "test": "test"
   },
   "config": {
-    "RABBIT_URI": "amqp://guest:guest@"
+    "RABBIT_URI_TEST": "amqp://guest:guest@"
   },
   "scripts": {
     "build": "gulp build",
