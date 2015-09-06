@@ -48,7 +48,7 @@ module rabbitRx {
 
       var contextErrorStream = 
         Rx.Observable.fromEvent<any>(<any>context, "error")
-        .selectMany(Rx.Observable.throw)
+        .selectMany(val =>  Rx.Observable.throw(val))
       var contextReadyStream = Rx.Observable.fromEvent<any>(<any>context, "ready");      
       var contextStream = contextErrorStream.merge(contextReadyStream);
         

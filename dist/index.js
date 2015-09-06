@@ -32,7 +32,7 @@ var rabbitRx;
             var _this = this;
             var context = rabbit.createContext(this.opts.uri);
             var contextErrorStream = Rx.Observable.fromEvent(context, "error")
-                .selectMany(Rx.Observable.throw);
+                .selectMany(function (val) { return Rx.Observable.throw(val); });
             var contextReadyStream = Rx.Observable.fromEvent(context, "ready");
             var contextStream = contextErrorStream.merge(contextReadyStream);
             return contextStream.map(function () {
