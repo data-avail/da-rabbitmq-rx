@@ -1,4 +1,4 @@
-
+/// <reference path="../typings/tsd.d.ts" />
 import Rx = require("rx");
 import rabbit = require("rabbit.js");
 declare module rabbitRx {
