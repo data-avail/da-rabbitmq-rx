@@ -3,7 +3,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-///<reference path="../typings/tsd.d.ts"/>
 var Rx = require("rx");
 var rabbit = require("rabbit.js");
 var RxNode = require("rx-node");

@@ -10,7 +10,8 @@
     "emitDecoratorMetadata": false,
     "outDir": "./dist"
   },
-  "files" : [  
+  "files" : [
+    "typings/tsd.d.ts",  
     "src/index.ts"
   ]
 }

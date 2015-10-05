@@ -1,4 +1,3 @@
-///<reference path="../typings/tsd.d.ts"/>
 import Rx = require("rx");
 import rabbit = require("rabbit.js");
 var RxNode = require("rx-node");
