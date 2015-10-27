@@ -149,19 +149,15 @@ module rabbitRx {
         this.connectStream.subscribe(socket => { 
           observer.onNext(socket.write(JSON.stringify(data), "utf8"));
           observer.onCompleted();
-      })
+        })
       );
             
+      observable.catch(err => {
+        console.log("da-rabbitmq rx write error", err);
+        return Rx.Observable.just(true);
+      }).subscribe(() => {
+      });
       
-      //always subscribe
-      //write method should do work even without subscribers      
-      observable.subscribe(() => {
-      });
-      /*
-      this.connectStream.subscribe(socket => { 
-          socket.write(JSON.stringify(data), "utf8");
-      });
-      */                       
       return observable;
     }        
   }

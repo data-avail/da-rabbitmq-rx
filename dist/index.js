@@ -117,15 +117,11 @@ var rabbitRx;
                     observer.onCompleted();
                 });
             });
-            //always subscribe
-            //write method should do work even without subscribers      
-            observable.subscribe(function () {
+            observable.catch(function (err) {
+                console.log("da-rabbitmq rx write error", err);
+                return Rx.Observable.just(true);
+            }).subscribe(function () {
             });
-            /*
-            this.connectStream.subscribe(socket => {
-                socket.write(JSON.stringify(data), "utf8");
-            });
-            */
             return observable;
         };
         return RabbitPub;
